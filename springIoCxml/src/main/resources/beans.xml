@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--把对象的创建交给spring来管理    -->
+<!--    <bean id = "accountService" class="cn.swust.service.imp.AccountServiceImp" ></bean>-->
+<!--    <bean id = "accountDao" class="cn.swust.dao.imp.AccountDaoImp" ></bean>-->
+    <bean id = "accountService" class = "cn.swust.factory.StaticMethodFactory" scope="prototype" factory-method = "getAccountService"></bean>
+    <bean id = "accountDao" class = "cn.swust.factory.StaticMethodFactory" scope="prototype" factory-method = "getAccountDao"></bean>
+
+
+<!--  spring对bean的管理细节
+        1.创建bean的3+1中方式
+        2.bean对象的作用范围
+        3.bean对象的生命周期
+
+
+        1）创建bean的三种方式（调用默认构造）
+            @使用默认构造方式例如，啥也不加，要求类必须有默认无参构造
+                <bean id = "accountDao" class="cn.swust.dao.imp.AccountDaoImp"></bean>
+
+            @使用工厂类 普通方法创建对象，就是先创建工厂，再执行工厂的创建对象的方法，来获得对象
+                <bean id = "instanceFactory" class = "cn.swust.factory.InstanceFactory"></bean>
+                <bean id = "accountService" factory-bean = "instanceFactory" factory-method = "getAccountService"></bean>
+                <bean id = "accountDao" factory-bean = "instanceFactory" factory-method = "getAccountDao"></bean>
+            @使用工厂类 的静态方法
+                <bean id = "accountService" class = "cn.swust.factory.StaticMethodFactory" factory-method = "getAccountService"></bean>
+                <bean id = "accountDao" class = "cn.swust.factory.StaticMethodFactory" factory-method = "getAccountDao"></bean>
+
+          2) bean对象的作用范围
+                bean标签的scope属性
+                    作用：用于指定bean的作用范围
+                    取值：
+                        singleton：单例（默认）
+                        prototype：多例的
+                            <bean id = "accountService" class = "cn.swust.factory.StaticMethodFactory" scope="prototype" factory-method = "getAccountService"></bean>
+                            <bean id = "accountDao" class = "cn.swust.factory.StaticMethodFactory" scope="prototype" factory-method = "getAccountDao"></bean>
+                        request：作用域web应用的请求范围
+                        session：作用于web应用的会话范围
+                        global-session：作用于集群环境的会话范围（全局会话范围），当不是集群环境时，它就是session  （作用：跟负载均衡相关）
+
+
+           3)bean对象生命周期
+                单例对象：与容器生命周期相同相关
+                    出生：容器创建时
+                    存活：容器存在
+                    死亡：容器销毁
+                多例对象：
+                    出生：使用对象时
+                    存活：对象存在，比如被其他地方引用等
+                    死亡：GC的事情，与容器的生命周期相关
+
+            依赖注入（即 创建bean对象）的方式：
+                1.使用参构造函数
+                    构造方式（带参数的构造函数，来创建bean对象）
+                    主要内容：
+                        constructor-arg标签：表示使用带参数的构造函数来创建bean对象
+                            标签中的属性：
+                                name：带参构造时，传入构造参数的参数名
+                                value：传入的参数的值
+
+                                ref：当参入的参数不是 基本类型时，需要引用 对象
+
+                    <bean id = "accountDao" class = "cn.swust.example.Person">
+                        <constructor-arg name = "name" value = "张三" ></constructor-arg>
+                        <constructor-arg name = "age" value = "18" ></constructor-arg>
+                        <constructor-arg name = "birthday" ref = "date" ></constructor-arg>
+                    </bean>
+                    <bean id = "date" class = "java.util.Date"></bean>
+
+                  2.使用对象的set方法注入
+                        主要内容
+                            property标签：表示使用对象的set方法来给对象赋值
+                               标签属性：
+                                    name:指定调用注入的方法的方法名
+                                    value：传入的参数，基本类型，或者String类型
+                                    ref: 其他应用类型
+                            <bean>
+                                <property name = "name" value = "张三"></property>
+                                <property name = "name" value = "张三"></property>
+                                <property name = "birthday" ref = "date"></property>
+                            </bean>
+                            <bean id = "date" class = "java.util.Date"></bean>
+
+
+                        注入参数有List、set、array或map、props类型注入 例子：
+                        <bean>
+                                <property name = "name" value = "张三"></property>
+                                <property name = "colors" > //list、set、array是相同结构，标签可以互换，
+                                    <list>
+                                        <value>red</value>
+                                        <value>yellow</value>
+                                        <value>green</value>
+                                    </list>
+                                </property>
+                                <property name = "myMap" > //map、props 结构也都是key-value，因此，标签也可以互换
+                                    <map>
+                                        <entry key = "key1" value = "value1"></entry>
+                                        <entry key = "key2" value = "value2"></entry>
+                                    </map>
+                                </property>
+                            </bean>
+
+-->
+</beans>

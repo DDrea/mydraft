@@ -1,0 +1,4 @@
+# Project exclude paths
+/annotation/target/
+/codeExecuteSequence/target/
+/springIoCRealize/target/

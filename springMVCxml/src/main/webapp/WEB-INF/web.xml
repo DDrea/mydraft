@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee  http://xmlns.jcp.org/xml/ns/javaee/application-client_7.xsd"
+         version="4.0">
+
+    <servlet>
+        <servlet-name>myweb</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!--      自定义springmvc配置的位置, 或直接在这个WEB-INF文件下创建springmv的配置，就不用申明-->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:springmvc.xml</param-value>
+        </init-param>
+        <!--      让tomcat在启动时创建servlet对象，的顺序，大于等于0-->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+
+    <!--  保证Servlet被请求到，需要配置mapping-->
+    <servlet-mapping>
+        <!--    名称,和servlet一致-->
+        <servlet-name>myweb</servlet-name>
+        <!--    拦截的路径   ‘/’表示，任何请求都会拦截，交给servlet处理
+                若为 /add ，则表示将/add请求交给servlet处理
+                比如http://localhost:8080/myweb/abc.add
+                匹配表达式 可以写为 *.xxx
+                比如：<url-pattern>*.add </url-pattern>
+        -->
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>
