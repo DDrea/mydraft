@@ -1,9 +1,22 @@
 package com.seatrend.entity;
 
+import org.springframework.lang.Nullable;
+
 public class Fruit {
     private Integer fid ;
     private String name;
     private Integer price;
+
+    public Fruit(String name, Integer price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public Fruit(Integer fid, String name, Integer price) {
+        this.fid = fid;
+        this.name = name;
+        this.price = price;
+    }
 
     public Integer getFid() {
         return fid;

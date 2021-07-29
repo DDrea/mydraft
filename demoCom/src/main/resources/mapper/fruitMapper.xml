@@ -3,7 +3,18 @@
                 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seatrend.mapper.FruitMapper">
-    <select id="findById" resultType="Fruit">
+
+    <select id="findById" resultType="fruit">
         select * from fruit where fid = #{id}
     </select>
+    <select id="findByName" parameterType="String" resultType="fruit">
+        select * from fruit where name like concat('%',concat(#{name}, '%'))
+    </select>
+    <insert id="addFruit" parameterType="fruit">
+        insert into fruit(name, price) values(#{name}, #{price})
+    </insert>
+    <update id="updateById" parameterType="fruit">
+        update table fruit set price = #{price}
+        where name= #{name}
+    </update>
 </mapper>
