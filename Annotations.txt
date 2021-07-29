@@ -1,0 +1,138 @@
+Spring涉及到的注解：
+
+
+@Configuration
+	示例：@Configuration
+	表明该类为 一个配置类，
+	配置类中可以在方法上添加@Bean注解，方法返回值为第三方包类的对象 ，来将三方包的类放入容器，
+	因为三方包的工具类已经定义好了，不能再在类上加上@Component注解来表示这是一个组件
+
+@ComponentScan()
+	value属性：是需要扫面注解的包名
+	通常用在配置类上（类上标注了@Configuration）。
+	默认情况下，是扫描在该类本包，及其子包下的Component，可以在值中添加其他包路径来扫描其他包下的组件
+	示例:@ComponentScan("cn.swust.test")
+
+@Component()  与（@Controller, @Service, @Repository 作用相同，都是表示这是Bean，但有各自的'含义'吧）
+	通常用在类上标明这个类是一个Bean（需要加入容器，/初始化时机）
+	value属性：表示该类在容器中的对象的名字，
+	通常与@AutoWired  或使用@Resource用来指定注入其他类的属性中
+	示例:@Component("human1") 或 @Component
+	
+@Resource(name = "...", type = "...")
+	一般用在属性上，
+	默认按照属性名称名称注入，当指定name或默认name匹配不到时，回退到类型匹配，也可指定类型匹配。
+
+@AutoWired 
+	作用与@Resource相同，但首先按照类型匹配，当容器中存在 多个该类型时，使用@Qualifier("bean_name") 配合选择
+
+@Lazy
+    	示例：@Lazy
+    	可用在类，方法，属性上， 表示延迟加载（在Bean容器初始化时不加载，在用到的时候再加载）
+
+
+
+
+SpringMVC涉及到的注解：
+
+@RequestMapping("/hehe")
+	用在@Contoller类上及其类中的方法上，用来处理来自浏览器对应的Request（如localhost:8080/hehe）
+	
+	示例：
+	@Controller
+ 	@RequestMapping("/happy")
+ 	blic class HappyController  {
+
+ 	@Autowired
+	private HappyService happyService;
+  
+ 	@RequestMapping(/hello/*)
+ 	public void sayHello(){
+		//请求为 /happy/hello/* 都会进入这个方法！
+		//例如：/happy/hello/123   /happy/hello/adb
+		//可以通过get/post 请求
+ 	}
+ 	@RequestMapping(value="/haha",method=RequestMethod.GET)
+ 	public void sayHaHa(){
+ 	//只能通过get请求
+ 		}
+		...
+	}
+	
+	
+@RequestParam(value = "", required = false)
+	用在Controller类中处理请求的方法参数上
+	将url上请求的参数绑定到对应处理方法的参数上，默认情况required = true，参数必须传入。
+	@RequestParam是用来处理 Content-Type 为 application/x-www-form-urlencoded 编码的内容的，
+	所以在postman中，要选择body的类型为 x-www-form-urlencoded，
+	这样在headers中就自动变为了 Content-Type : application/x-www-form-urlencoded 编码格式  
+
+	示例：
+	（如，localhost:8080/happy?name=唐家三少&age=999）
+	@RequestMapping("/happy")
+ 	public String sayHappy(
+ 	@RequestParam(value = "name", required = false) String name,
+ 	@RequestParam(value = "age", required = true) String age) {
+ 	//age参数必须传 ，name可传可不传
+ 		...
+ 	}
+
+@RequestBody
+	用在@Controller方法中的参数，上放注意与@RequestParam的区别
+	注解@RequestBody接收的参数是来自requestBody中，即请求体/请求数据参数content。
+	一般用于处理非 Content-Type: application/x-www-form-urlencoded编码格式的数据，
+	比如：application/json、application/xml等类型的数据。
+	就application/json类型的数据而言，使用注解@RequestBody可以将body里面所有的json数据传到后端，后端再进行解析
+	
+	示例:
+	public String testBody(@ReqestBody List<Map<String , String >> mapLsit){
+		//需要两层for循环才能将请求body中的key和value拿到
+		for(Map<String, String> tempMap: mapList){
+			for(Map.entry(String, String) tempEntry: tempMap){
+				//sout(tempEntry.getKey() + tempEntry.getValue)
+			}
+		}
+	}
+
+@PathValuable
+	接收请求路径中占位符的值
+	通过 @PathVariable 可以将URL中占位符参数{xxx}绑定到处理器类的方法形参中@PathVariable(“xxx“)
+	中的参数可以是任意的简单类型，如int, long, Date等等。
+	Spring会自动将其转换成合适的类型或者抛出 TypeMismatchException异常。当然我们也可以注册支持额外的数据类型。
+	支持使用正则表达式，这就决定了它的超强大属性，它能在路径模板中使用占位符，可以设定特定的前缀匹配，后缀匹配等自定义格式。
+	
+	示例
+	 @RequestMapping(value = "/seatrend/{petId}/{petName}", method = RequestMethod.GET)
+	 public void getSomeId(@PathVariable("petId") String petabcId, @PathVariable("petName")String petName){
+	 	 //将参数与url上的{petId}与参数绑定
+	 	//doSomething...
+	 }
+	
+
+@ResponseBody
+
+	示例：
+	@ResponseBody是作用在方法上/或Controller类上
+	一般在异步获取数据时使用【也就是AJAX】
+	在使用@RequestMapping后，返回值通常解析为跳转路径，
+	但是加上 @ResponseBody 后返回结果不会被解析为跳转路径，而是直接写入 HTTP response body 中。
+	比如异步获取 json 数据，加上@ResponseBody 后，会直接返回 json 数据。
+	而@RequestBody 将 HTTP 请求正文插入方法中，使用适合的 HttpMessageConverter 将请求体写入某个对象（过程称为解析）。
+
+	@RequestMapping("/login.do")
+	@ResponseBody 
+	public Object login(String name, String password, HttpSession session) {
+		user = userService.checkLogin(name, password);
+		session.setAttribute("user", user);
+		return new JsonResult(user);		
+	}
+	
+springboot注解：
+	
+@SpringBootApplication
+	在spring程序入口类上
+	该注解包含了：
+	@SpringBootConfiguration
+		它继承自 @Configuration 注解，功能也跟 @Configuration 一样
+	@EnableAutoConfiguration
+		用来启动自动配置。开启自动配置后， Spring Boot 会扫描项目中所有的配置类，然后根据配置信息启动 Spring 容器。
