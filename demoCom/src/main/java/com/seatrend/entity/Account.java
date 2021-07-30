@@ -4,6 +4,12 @@ public class Account {
     private Integer aid;
     private String name;
 
+
+    public Account(Integer aid, String name) {
+        this.aid = aid;
+        this.name = name;
+    }
+
     public Integer getAid() {
         return aid;
     }
