@@ -1,0 +1,13 @@
+spring springmvc 相关注解
+http
+事务的传播特性，事务隔离
+
+获取RequestBody中的数据,来添加到数据库
+************************************
+mybatis异常捕获:
+在mapper和service方法上 throws DataAccessException
+在controller里捕获,DataAccessException e
+*************************************
+mapper条件表达式
+
+spring boot 事务控制
