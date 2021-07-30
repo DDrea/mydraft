@@ -39,7 +39,9 @@ public class FruitController {
     }
     @RequestMapping("/updateByName")
     Fruit updateByName(@RequestParam("name") String name,@RequestParam("price") Integer price){
-        Fruit fruit = new Fruit(name, price);
+        Fruit fruit = new Fruit();
+        fruit.setName(name);
+        fruit.setPrice(price);
         fruitService.updateByName(fruit);
         return findByName(name).get(0);
     }

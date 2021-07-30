@@ -13,8 +13,8 @@
     <insert id="addFruit" parameterType="fruit">
         insert into fruit(name, price) values(#{name}, #{price})
     </insert>
-    <update id="updateById" parameterType="fruit">
-        update table fruit set price = #{price}
+    <update id="updateByName" parameterType="fruit">
+        update fruit set price = #{price}
         where name= #{name}
     </update>
 </mapper>
