@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seatrend.mapper.FruitOrderMapper">
+    <!--  FruitOrder表字段与属性名的映射  -->
+    <resultMap id="mapFruitOrder" type="com.seatrend.entity.FruitOrder">
+        <result column="price_per_kilo" property="pricePerKilo" javaType="Integer"/>
+    </resultMap>
+
+<!--    <parameterMap id="mapFruitOrder" type="com.seatrend.entity.FruitOrder">-->
+<!--        <parameter property="pricePerKilo" jdbcType="price_Per_Kilo" />-->
+<!--    </parameterMap>-->
+    <insert id="addFruitOrder" parameterType="fruitOrder" >
+        insert into fruit_order( aid,fid, amount,price_per_kilo) values(#{aid,jdbcType=NUMERIC},#{fid,jdbcType=NUMERIC}, #{amount,jdbcType=NUMERIC}, #{pricePerKilo,jdbcType=NUMERIC})
+    </insert>
+    <delete id="deleteFruitOrderByOid" parameterType="Integer">
+        delete from fruit_order
+        where oid = #{oid}
+    </delete>
+    <update id="updateFruitOrderByOid" parameterType="fruitOrder">
+        <if test="oid != null">
+            update fruit_order
+            <set>
+                <if test="aid != null">aid = #{aid},</if>
+                <if test="fid != null">fid = #{fid},</if>
+                <if test="amount != null">amount = #{amount},</if>
+                <!--若最后一个值price_Per_Kilo 为空,那么mybatis会自动?(咋弄)去掉最后一个逗号-->
+                <if test="pricePerKilo != null">price_Per_Kilo = pricePerKilo</if>
+            </set>
+            where oid = #{oid}
+        </if>
+    </update>
+    <select id="findByOid" parameterType="Integer" resultMap="mapFruitOrder">
+        select * from fruit_order where oid = #{oid}
+    </select>
+    <select id="findByAid" parameterType="Integer" resultMap="mapFruitOrder">
+        select * from fruit_order where aid = #{aid}
+    </select>
+    <select id="findByFid" parameterType="Integer" resultMap="mapFruitOrder">
+        select * from fruit_order where Fid = #{fid}
+    </select>
+    <select id="findByAmount" parameterType="Integer" resultMap="mapFruitOrder">
+        select * from fruit_order where amount = #{amount}
+    </select>
+
+</mapper>

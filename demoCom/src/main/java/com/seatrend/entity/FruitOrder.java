@@ -4,8 +4,29 @@ public class FruitOrder {
     private Integer oid;//primary key
     private Integer fid;
     private Integer aid;
-    private String amount;
+    private Integer amount;
     private Integer pricePerKilo;
+
+    public FruitOrder() {
+    }
+    @Override
+    public String toString() {
+        return "FruitOrder{" +
+                "oid=" + oid +
+                ", fid=" + fid +
+                ", aid=" + aid +
+                ", amount=" + amount +
+                ", pricePerKilo=" + pricePerKilo +
+                '}';
+    }
+
+    public FruitOrder(Integer oid, Integer fid, Integer aid, Integer amount, Integer pricePerKilo) {
+        this.oid = oid;
+        this.fid = fid;
+        this.aid = aid;
+        this.amount = amount;
+        this.pricePerKilo = pricePerKilo;
+    }
 
     public Integer getOid() {
         return oid;
@@ -31,11 +52,11 @@ public class FruitOrder {
         this.aid = aid;
     }
 
-    public String getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 
